@@ -1,0 +1,107 @@
+version: "3.9"
+
+# =============================================================
+# Computer Lab Management System — docker-compose.yml
+# Kullanım: docker compose --env-file .env up -d
+# =============================================================
+
+services:
+
+  # ── MySQL 8 ──────────────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: clms_db
+    restart: unless-stopped
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE:      ${MYSQL_DATABASE}
+      MYSQL_USER:          ${MYSQL_USER}
+      MYSQL_PASSWORD:      ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost",
+             "-u", "${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    # Port intentionally NOT exposed to host in production.
+    # ports:
+    #   - "3306:3306"
+
+  # ── Spring Boot Backend ───────────────────────────────────────
+  backend:
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER}/clms-backend:${APP_VERSION:-latest}
+    container_name: clms_backend
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        APP_VERSION: ${APP_VERSION:-dev}
+    environment:
+      SPRING_DATASOURCE_URL:      jdbc:mysql://db:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
+      SPRING_FLYWAY_ENABLED:      "true"
+      JWT_SECRET:                 ${JWT_SECRET}
+      JWT_ACCESS_EXPIRY_MINUTES:  ${JWT_ACCESS_EXPIRY_MINUTES:-15}
+      JWT_REFRESH_EXPIRY_DAYS:    ${JWT_REFRESH_EXPIRY_DAYS:-7}
+      SERVER_PORT:                8080
+      SPRING_PROFILES_ACTIVE:     ${SPRING_PROFILE:-prod}
+      LOGGING_LEVEL_ROOT:         ${LOG_LEVEL_ROOT:-WARN}
+      LOGGING_LEVEL_COM_CLMS:     ${LOG_LEVEL_APP:-INFO}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+
+  # ── Nginx (React static + reverse proxy) ─────────────────────
+  frontend:
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_OWNER}/clms-frontend:${APP_VERSION:-latest}
+    container_name: clms_frontend
+    restart: unless-stopped
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+    ports:
+      - "${HOST_HTTP_PORT:-80}:80"
+      - "${HOST_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - internal
+      - external
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  internal:
+    driver: bridge
+    internal: true
+  external:
+    driver: bridge
