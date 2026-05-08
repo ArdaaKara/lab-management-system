@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: clms-backend
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:clms_db}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${DB_USER:clms_user}
+    password: ${DB_PASSWORD:clms_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET:very-long-and-secure-secret-key-that-should-be-changed}
+  expiration: 86400000 # 24 hours
