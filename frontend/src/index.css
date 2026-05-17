@@ -1,3 +1,136 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-background: #0A0A0F;
+  --color-accent: #C9A84C;
+
+  /* Backgrounds */
+  --bg-base: #0A0A0F;
+  --bg-surface: #13131A;
+  --bg-raised: #1A1A24;
+
+  /* Borders */
+  --border-subtle: #1E1E2E;
+  --border-default: #2A2A3E;
+  --border-strong: #3A3A52;
+
+  /* Accent */
+  --accent: #C9A84C;
+  --accent-hover: #D4B86A;
+  --accent-muted: rgba(201, 168, 76, 0.10);
+  --accent-text: #0A0A0F;
+
+  /* Text */
+  --text-primary: #E8E8F0;
+  --text-secondary: #8888A8;
+  --text-muted: #4A4A62;
+  --text-mono: #A8B4C8;
+
+  /* Status */
+  --status-active: #2D6A4F;
+  --status-active-bg: #1A3D2E;
+  --status-active-text: #52B788;
+  --status-faulty: #8B1A1A;
+  --status-faulty-bg: #3D0F0F;
+  --status-faulty-text: #E07070;
+  --status-repair: #7A5C00;
+  --status-repair-bg: #3D2E00;
+  --status-repair-text: #D4A017;
+  --status-decomm: #2A2A35;
+  --status-decomm-bg: #1A1A22;
+  --status-decomm-text: #5A5A72;
+
+  /* Semantic */
+  --color-danger: #E07070;
+  --color-success: #52B788;
+  --color-warning: #D4A017;
+  --color-info: #6B8FD4;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Typography */
+  --font-ui: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 14px;
+  --text-md: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+}
+
+html,
+body {
+  background-color: #0A0A0F;
+  color: #E8E8F0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #C9A84C;
+  color: #0A0A0F;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #13131A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E1E2E;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C9A84C;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-surface) 25%,
+    var(--bg-raised)  50%,
+    var(--bg-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

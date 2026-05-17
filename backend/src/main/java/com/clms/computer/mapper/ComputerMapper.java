@@ -12,6 +12,7 @@ import java.util.List;
 public interface ComputerMapper {
 
     @Mapping(source = "lab.id", target = "labId")
+    @Mapping(source = "active", target = "isActive")
     ComputerResponse toResponse(Computer computer);
 
     List<ComputerResponse> toResponseList(List<Computer> computers);

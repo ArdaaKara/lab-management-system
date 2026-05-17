@@ -32,13 +32,13 @@ import java.time.Instant;
 public class LabAssignment {
 
     @Id
-    @Column(insertable = false, updatable = false, length = 36)
+    @Column(insertable = false, updatable = false, columnDefinition = "CHAR(36)")
     private String id;
 
-    @Column(name = "user_id", nullable = false, length = 36)
+    @Column(name = "user_id", nullable = false, columnDefinition = "CHAR(36)")
     private String userId;
 
-    @Column(name = "lab_id", nullable = false, length = 36)
+    @Column(name = "lab_id", nullable = false, columnDefinition = "CHAR(36)")
     private String labId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

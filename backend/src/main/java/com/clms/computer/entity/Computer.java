@@ -1,5 +1,6 @@
 package com.clms.computer.entity;
 
+import com.clms.computer.dto.HardwareSpecs;
 import com.clms.lab.entity.Lab;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "computers")
@@ -22,8 +24,13 @@ import java.time.Instant;
 public class Computer {
 
     @Id
-    @Column(insertable = false, updatable = false)
+    @Column(columnDefinition = "CHAR(36)")
     private String id;
+
+    @PrePersist
+    private void generateId() {
+        if (id == null) id = UUID.randomUUID().toString();
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lab_id")
@@ -34,7 +41,10 @@ public class Computer {
     private String macAddress;
     private String ipAddress;
     
+    @Column(columnDefinition = "TINYINT")
     private Integer gridRow;
+
+    @Column(columnDefinition = "TINYINT")
     private Integer gridCol;
 
     @Enumerated(EnumType.STRING)

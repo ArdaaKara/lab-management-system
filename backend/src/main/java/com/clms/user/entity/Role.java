@@ -14,6 +14,7 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "TINYINT")
     private Integer id;
 
     @Column(nullable = false, unique = true, length = 30)

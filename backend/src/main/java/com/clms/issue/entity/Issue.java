@@ -21,7 +21,7 @@ import java.time.Instant;
 public class Issue {
 
     @Id
-    @Column(insertable = false, updatable = false)
+    @Column(insertable = false, updatable = false, columnDefinition = "CHAR(36)")
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)

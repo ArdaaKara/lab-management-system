@@ -1,18 +1,18 @@
 import { useEffect, useRef } from 'react';
 
 export function usePolling(fn: () => void, intervalMs: number): void {
-  const intervalIdRef = useRef<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const start = () => {
-      if (intervalIdRef.current !== null) return;
-      intervalIdRef.current = window.setInterval(fn, intervalMs);
+      if (intervalRef.current !== null) clearInterval(intervalRef.current);
+      intervalRef.current = setInterval(fn, intervalMs);
     };
 
     const stop = () => {
-      if (intervalIdRef.current !== null) {
-        window.clearInterval(intervalIdRef.current);
-        intervalIdRef.current = null;
+      if (intervalRef.current !== null) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
 
@@ -20,7 +20,6 @@ export function usePolling(fn: () => void, intervalMs: number): void {
       if (document.hidden) {
         stop();
       } else {
-        stop();
         start();
       }
     };

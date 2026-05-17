@@ -7,7 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,7 +22,8 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     @Id
-    @Column(updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(updatable = false, nullable = false, columnDefinition = "CHAR(36)")
     private String id;
 
     @Column(nullable = false, length = 120)

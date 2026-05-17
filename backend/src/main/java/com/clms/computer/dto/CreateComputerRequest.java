@@ -1,6 +1,6 @@
 package com.clms.computer.dto;
 
-import com.clms.computer.entity.HardwareSpecs;
+import com.clms.computer.dto.HardwareSpecs;
 import jakarta.validation.constraints.NotBlank;
 
 public record CreateComputerRequest(

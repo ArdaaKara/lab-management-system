@@ -7,7 +7,7 @@ import lombok.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "issue_histories")
+@Table(name = "issue_history")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +16,7 @@ import java.time.Instant;
 public class IssueHistory {
 
     @Id
-    @Column(insertable = false, updatable = false)
+    @Column(insertable = false, updatable = false, columnDefinition = "CHAR(36)")
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)

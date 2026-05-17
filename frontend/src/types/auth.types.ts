@@ -2,13 +2,15 @@ export type Role = 'ADMIN' | 'TEACHER' | 'TECHNICIAN';
 
 export interface User {
   id: string;
-  username: string;
   email: string;
+  fullName: string;
+  username?: string;
   roles: Role[];
+  mustChangePassword?: boolean;
 }
 
 export interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 

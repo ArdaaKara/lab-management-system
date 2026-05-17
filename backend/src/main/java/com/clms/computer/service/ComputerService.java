@@ -72,7 +72,11 @@ public class ComputerService {
         computer.setIpAddress(request.ipAddress());
         computer.setGridRow(request.gridRow());
         computer.setGridCol(request.gridCol());
-        computer.setHardwareSpecs(request.hardwareSpecs());
+        computer.setHardwareSpecs(
+                request.hardwareSpecs() != null
+                        ? request.hardwareSpecs()
+                        : new com.clms.computer.dto.HardwareSpecs(null, 0, 0, null)
+        );
         computer.setStatus(ComputerStatus.ACTIVE);
         computer.setActive(true);
 
