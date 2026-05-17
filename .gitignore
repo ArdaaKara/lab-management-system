@@ -1,3 +1,4 @@
+# ── Maven ─────────────────────────────────────────────────────
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -7,45 +8,65 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-# https://maven.apache.org/wrapper/#usage-without-binary-jar
 .mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+!**/test/**/*.jar
 
-# Eclipse m2e generated files
-# Eclipse Core
+# Eclipse m2e
 .project
-# JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-
-.agent
+# ── Node / Frontend ───────────────────────────────────────────
 node_modules/
-.env
+frontend/node_modules/
 
-# AI Tools
+# Vite / env files
+.env
+.env.local
+.env.*.local
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# ── Docker / Secrets ──────────────────────────────────────────
+nginx/certs/
+*.pem
+*.crt
+*.key
+*.p12
+*.jks
+
+# ── Project docs (added at project end) ───────────────────────
+docs/
+
+# ── Migration files with credentials ──────────────────────────
+backend/src/main/resources/db/migration/V3__fix_password_hashes.sql
+
+# ── AI Tools ──────────────────────────────────────────────────
 .geminirules
 .cursorrules
 .gemini/
 .agent/
 .claude/
 
-# Logs
-
+# ── Logs ──────────────────────────────────────────────────────
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# OS Files
+# ── OS ────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 
-# IDEs
+# ── IDEs ──────────────────────────────────────────────────────
 .idea/
 .vscode/
 *.sublime-project
 *.sublime-workspace
 
-# Build artifacts
+# ── Build artifacts ───────────────────────────────────────────
 dist/
 build/
 out/
